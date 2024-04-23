@@ -1,10 +1,12 @@
+require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
-const { expressjwt: jwt } = require('express-jwt');
+//const { expressjwt: jwt } = require('express-jwt');
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -21,14 +23,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(jwt({ secret: process.env.JWT_secret_key, algorithms: ['HS256'] }).unless({ path: [] }));
+//app.use(jwt({ secret: process.env.JWT_secret_key, algorithms: ['HS256'] }).unless({ path: [] }));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+ res.status(404).json({
+  __exception_msg__ : "Not Found"
+ })
 });
 
 // error handler
